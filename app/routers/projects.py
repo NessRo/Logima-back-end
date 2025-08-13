@@ -6,6 +6,7 @@ from sqlalchemy.orm import selectinload
 from uuid import uuid4, UUID
 from datetime import  datetime, timezone
 from typing import List
+from app.deps import get_current_user, require_csrf
 
 from app import schemas, models
 from app.database import get_session
@@ -17,6 +18,7 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 @router.get("/api/list", response_model=List[schemas.ProjectOut])
 async def get_projects(
     db: AsyncSession = Depends(get_session),
+    user=Depends(get_current_user)
 ):
     # Query all projects, newest first
     result = await db.execute(
@@ -30,7 +32,8 @@ async def get_projects(
 
 
 
-@router.post("/api/create", response_model=schemas.ProjectOut, status_code=201)
+@router.post("/api/create", response_model=schemas.ProjectOut, status_code=201,
+             dependencies=[Depends(get_current_user),Depends(require_csrf)])
 async def create_project(
     payload: schemas.ProjectCreate, 
     db: AsyncSession = Depends(get_session),
@@ -51,7 +54,8 @@ async def create_project(
     await db.refresh(obj)
     return obj
 
-@router.patch("/api/{project_id}", response_model=schemas.ProjectOut)
+@router.patch("/api/{project_id}", response_model=schemas.ProjectOut,
+              dependencies=[Depends(get_current_user),Depends(require_csrf)])
 async def update_project(
     project_id: UUID,
     payload: schemas.ProjectUpdate,

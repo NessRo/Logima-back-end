@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, constr
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
@@ -22,3 +22,21 @@ class ProjectOut(BaseModel):
 class ProjectUpdate(BaseModel):
     name: Optional[str] = None
     status: Optional[str] = None
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: constr(min_length=8)
+
+class LoginIn(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserOut(BaseModel):
+    id: UUID
+    email: EmailStr
+    created: datetime
+    class Config:
+        from_attributes = True
+
+class TokenOK(BaseModel):
+    ok: bool = True
