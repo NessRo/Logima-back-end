@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
 from app.database import engine
 from app.routers import auth, projects
@@ -22,12 +23,19 @@ app = FastAPI(
 
 # --- CORS so React can talk to it locally ---
 origins = [settings.FRONTEND_ORIGIN]
+# CORS first (so browsers can talk to API)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[settings.FRONTEND_ORIGIN],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["Content-Type","Authorization","X-CSRF-Token"],
+    allow_headers=["Content-Type", "Authorization", "X-CSRF-Token"],
+)
+
+# Session middleware for Authlib (stores OAuth state/nonce)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SESSION_SECRET,
 )
 
 # --- Register routers ---
