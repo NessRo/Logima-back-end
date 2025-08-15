@@ -85,7 +85,7 @@ async def google_callback(request: Request, response: Response, db: AsyncSession
     token_jwt = make_access_token(sub=str(user.id))
     csrf = make_csrf()
 
-    redirect = RedirectResponse(url=settings.FRONTEND_ORIGIN, status_code=302)
+    redirect = RedirectResponse(url=f"{settings.FRONTEND_ORIGIN.rstrip('/')}/auth/callback", status_code=302)
     redirect.set_cookie("access_token", token_jwt, httponly=True, secure=(settings.ENV=="prod"),
                         samesite="Lax", path="/", max_age=15*60)
     redirect.set_cookie("csrf_token", csrf, httponly=False, secure=(settings.ENV=="prod"),
