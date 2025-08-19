@@ -18,12 +18,14 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 @router.get("/api/list", response_model=List[schemas.ProjectOut])
 async def get_projects(
     db: AsyncSession = Depends(get_session),
-    user=Depends(get_current_user)
+    user=Depends(get_current_user),
 ):
     # Query all projects, newest first
     result = await db.execute(
         select(models.Project)
-        .where(models.Project.status == "active")
+        .where(
+            models.Project.status == "active",
+            models.Project.owner_id == user.id)
         .order_by(models.Project.created.desc())  # sort by created timestamp descending
         .options(selectinload("*"))  # optional: eager load relationships if needed
     )
@@ -33,15 +35,16 @@ async def get_projects(
 
 
 @router.post("/api/create", response_model=schemas.ProjectOut, status_code=201,
-             dependencies=[Depends(get_current_user),Depends(require_csrf)])
+             dependencies=[Depends(require_csrf)])
 async def create_project(
     payload: schemas.ProjectCreate, 
     db: AsyncSession = Depends(get_session),
+    user = Depends(get_current_user),
 ):
     obj = models.Project(
         id=uuid4(),
         name=payload.name,
-        created_by=payload.created_by,
+        owner_id=user.id,
         status=payload.status,
         description=payload.description,
     )

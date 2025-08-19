@@ -6,7 +6,6 @@ from typing import Optional
 
 class ProjectCreate(BaseModel):
     name: str
-    created_by: str
     status: str
     description: Optional[str] = None
 
@@ -15,7 +14,7 @@ class ProjectOut(BaseModel):
     id: UUID
     name: str
     created: datetime
-    created_by: str
+    owner_id: UUID
     status: str
     description: Optional[str] = None
 
@@ -40,3 +39,6 @@ class UserOut(BaseModel):
 
 class TokenOK(BaseModel):
     ok: bool = True
+
+class ProjectList(BaseModel):
+    created_by: str
