@@ -7,10 +7,12 @@ from uuid import uuid4, UUID
 from datetime import  datetime, timezone
 from typing import List
 from app.deps import get_current_user, require_csrf
+from app.services.openai_service import OpenAIService
 
 from app import schemas, models
 from app.database import get_session
 
+oai_service = OpenAIService()
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -41,12 +43,16 @@ async def create_project(
     db: AsyncSession = Depends(get_session),
     user = Depends(get_current_user),
 ):
+    
+    ai_project_outcome = await oai_service.generate_outcome(payload.description or "")
+
     obj = models.Project(
         id=uuid4(),
         name=payload.name,
         owner_id=user.id,
         status=payload.status,
         description=payload.description,
+        project_outcome=ai_project_outcome
     )
     db.add(obj)
     try:

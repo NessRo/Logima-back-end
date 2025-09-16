@@ -30,6 +30,8 @@ class Project(Base):
 
     owner = relationship('User', back_populates='projects')
 
+    project_outcome = Column(String, nullable=True)
+
 class User(Base):
     __tablename__='users'
     

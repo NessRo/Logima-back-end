@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     FRONTEND_ORIGIN: str = "http://localhost:5173"
     ENV: str = "dev"
 
+    openai_api_key: str
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
