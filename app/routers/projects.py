@@ -34,6 +34,24 @@ async def get_projects(
     projects = result.scalars().all()
     return projects
 
+@router.get("/api/{project_id}", response_model=schemas.ProjectOut)
+async def get_project_by_id(
+    project_id: UUID,
+    db: AsyncSession = Depends(get_session)
+):
+    result = await db.execute(
+        select(models.Project)
+        .where(
+            models.Project.id == project_id,
+        )
+        .options(selectinload("*"))
+    )
+    project = result.scalar_one_or_none()
+    if project is None:
+        # Returning 404 avoids leaking existence of other users' IDs.
+        raise HTTPException(status_code=404, detail="Project not found")
+    return project
+
 
 
 @router.post("/api/create", response_model=schemas.ProjectOut, status_code=201,

@@ -17,6 +17,7 @@ class ProjectOut(BaseModel):
     owner_id: UUID
     status: str
     description: Optional[str] = None
+    project_outcome: str
 
 class ProjectUpdate(BaseModel):
     name: Optional[str] = None

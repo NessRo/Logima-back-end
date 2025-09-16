@@ -5,7 +5,7 @@ from app.config import Settings
 settings = Settings()
 
 class OpenAIService:
-    def __init__(self, model: str = "gpt-4.1-mini", timeout_s: float = 8.0, retries: int = 1):
+    def __init__(self, model: str = "gpt-5-mini", timeout_s: float = 8.0, retries: int = 1):
         self.client = AsyncOpenAI(api_key=settings.openai_api_key)
         self.model = model
         self.timeout_s = timeout_s
