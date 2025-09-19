@@ -22,6 +22,7 @@ class ProjectOut(BaseModel):
 class ProjectUpdate(BaseModel):
     name: Optional[str] = None
     status: Optional[str] = None
+    project_outcome: Optional[str] = None
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -43,3 +44,6 @@ class TokenOK(BaseModel):
 
 class ProjectList(BaseModel):
     created_by: str
+
+class OutcomeRegenerate(BaseModel):
+    description: Optional[str] = None  # if provided, will be used as the AI input
