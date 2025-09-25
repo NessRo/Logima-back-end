@@ -40,7 +40,7 @@ class OpenAIService:
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
                 ],
-                max_output_tokens=180,
+                max_output_tokens=500,
             )
             return resp.output_text.strip()
 

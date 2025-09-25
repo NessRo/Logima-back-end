@@ -130,9 +130,8 @@ async def regenerate_project_outcome(
         raise HTTPException(status_code=404, detail="Project not found")
 
     # Choose description: override if provided, else use current project.description
-    source_description = (
-        (payload.description if payload and payload.description is not None else obj.description) or ""
-    )
+    source_description = (obj.description)
+    
 
     try:
         new_outcome = await oai_service.generate_outcome(source_description)
@@ -153,3 +152,5 @@ async def regenerate_project_outcome(
 
     await db.refresh(obj)
     return obj
+
+

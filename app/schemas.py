@@ -47,3 +47,4 @@ class ProjectList(BaseModel):
 
 class OutcomeRegenerate(BaseModel):
     description: Optional[str] = None  # if provided, will be used as the AI input
+
