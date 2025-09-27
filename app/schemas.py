@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, constr
 from uuid import UUID
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
 
 class ProjectCreate(BaseModel):
@@ -48,3 +48,11 @@ class ProjectList(BaseModel):
 class OutcomeRegenerate(BaseModel):
     description: Optional[str] = None  # if provided, will be used as the AI input
 
+class PresignedPostOut(BaseModel):
+    url: str
+    fields: Dict[str, str]
+    key: str
+    public_url: str
+
+class PresignedPostResponse(BaseModel):
+    upload: PresignedPostOut

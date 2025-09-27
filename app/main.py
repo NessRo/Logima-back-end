@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
 from app.database import engine
-from app.routers import auth, projects
+from app.routers import auth, projects, uploads
 from app.config import Settings
 
 
@@ -41,6 +41,7 @@ app.add_middleware(
 # --- Register routers ---
 app.include_router(projects.router)  # this makes /projects/... routes active
 app.include_router(auth.router) # this makes /auth/ routes active
+app.include_router(uploads.router)
 
 # --- Routes -------------------------------------------------
 @app.get("/")
