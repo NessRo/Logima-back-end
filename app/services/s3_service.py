@@ -5,7 +5,7 @@ import os
 import time
 import uuid
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 import boto3
 from botocore.config import Config as BotoConfig
@@ -129,3 +129,25 @@ def create_presigned_post(
         key=key,
         public_url=_public_url(key),
     )
+
+def head_object(*, key: str) -> Dict[str, Any]:
+    """
+    Fetch object metadata without downloading it.
+    Returns { content_length, content_type, etag, last_modified }
+    Raises FileNotFoundError if the object doesn't exist.
+    """
+    try:
+        r = _s3.head_object(Bucket=settings.S3_BUCKET, Key=key)
+        return {
+            "content_length": r.get("ContentLength"),
+            "content_type": r.get("ContentType"),
+            "etag": r.get("ETag"),
+            "last_modified": (
+                r.get("LastModified").isoformat() if r.get("LastModified") else None
+            ),
+        }
+    except ClientError as e:
+        code = e.response.get("Error", {}).get("Code")
+        if code in ("404", "NoSuchKey", "NotFound"):
+            raise FileNotFoundError(f"S3 object not found: {key}") from e
+        raise RuntimeError(f"HEAD failed for {key}: {e}") from e
