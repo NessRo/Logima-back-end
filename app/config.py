@@ -38,6 +38,7 @@ class Settings(BaseSettings):
         "image/png", "image/jpeg", "application/pdf",
         "text/plain", "application/octet-stream",
     ]
+    SQS_UPLOADS_QUEUE_URL: str | None = None
 
     # Local dev creds (optional). Leave unset in prod (EC2 role will be used).
     AWS_ACCESS_KEY_ID: Optional[str] = None

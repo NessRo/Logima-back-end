@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from app.services.s3_service import head_object
 from starlette.concurrency import run_in_threadpool
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.services.event_bus import publish_artifact_uploaded
 
 router = APIRouter(prefix="/uploads", tags=["uploads"])
 
@@ -78,4 +79,16 @@ async def confirm_upload(
         artifact.uploaded_at = datetime.now(timezone.utc)
 
     await db.commit()
+
+    await run_in_threadpool(
+        publish_artifact_uploaded,
+        s3_key=artifact.s3_key,
+        bucket=artifact.s3_bucket,
+        project_id=str(artifact.project_id) if artifact.project_id else None,
+        user_id=str(artifact.user_id) if artifact.user_id else None,
+        original_filename=artifact.original_filename,
+        content_type=artifact.content_type,
+        public_url=artifact.public_url or "",
+    )
+
     return {"ok": True, "key": key, "size_bytes": artifact.size_bytes, "etag": artifact.etag, "status": artifact.status}
