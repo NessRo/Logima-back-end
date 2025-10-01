@@ -3,13 +3,17 @@ runtime: python311
 
 build:
   commands:
+    pre-build:
+      - echo "PWD=$(pwd)"; ls -la
+      - python3 --version; pip3 --version
     build:
-      - python -m pip install --upgrade pip
-      - python -m pip install -r requirements.txt
+      - python3 -m pip install -U pip setuptools wheel
+      - python3 -m pip install --no-cache-dir -r requirements.txt
+    post-build:
+      - python3 -c "import fastapi, uvicorn; print('FastAPI', fastapi.__version__); print('Uvicorn', uvicorn.__version__)"
 
 run:
   runtime-version: 3.11
-  # lock if you want Python 3.11 specifically (optional)
   command: uvicorn app.main:app --host 0.0.0.0 --port 8080
-  # network:                      # optional; default port is 8080
-  #   port: 8080
+  network:
+    port: 8080
