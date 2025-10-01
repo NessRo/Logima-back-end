@@ -4,7 +4,6 @@ runtime: python311
 build:
   commands:
     pre-build:
-      - echo "PWD=$(pwd)"; ls -la
       - python3 --version; pip3 --version
     build:
       - python3 -m pip install -U pip setuptools wheel
@@ -16,12 +15,11 @@ run:
   runtime-version: 3.11
   pre-run:
     - python3 -m pip install --no-cache-dir -r requirements.txt
-    - python3 -c "import uvicorn; print('Run OK uvicorn:', uvicorn.__version__)"
   command: python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8080
   network:
     port: 8080
 
-   # ---------- NON-SECRETS (plain env) ----------
+  # ---------- NON-SECRETS (plain env) ----------
   env:
     - name: ENV
       value: "prod"
@@ -43,8 +41,9 @@ run:
       value: "1000000000"
     - name: S3_ALLOWED_CONTENT_TYPES
       value: '["image/png","image/jpeg","application/pdf","text/plain","application/octet-stream"]'
-    - name: DATABASE_URL
-      value-from: "logima-backend-app-proxy.proxy-cx2qwwsekqg2.us-east-2.rds.amazonaws.com"
+    # --- IAM/RDS Proxy vars (use these instead of DATABASE_URL) ---
+    - name: DB_HOST
+      value: "logima-backend-app-proxy.proxy-cx2qwwsekqg2.us-east-2.rds.amazonaws.com"
     - name: DB_PORT
       value: "5432"
     - name: DB_NAME
@@ -52,10 +51,8 @@ run:
     - name: DB_USER
       value: "app_user"
 
-  # ---------- SECRETS (map each JSON key) ----------
+  # ---------- SECRETS (from Secrets Manager) ----------
   secrets:
-    - name: DATABASE_URL
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:DATABASE_URL"
     - name: SECRET_KEY
       value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SECRET_KEY"
     - name: SESSION_SECRET
