@@ -14,6 +14,9 @@ build:
 
 run:
   runtime-version: 3.11
+  pre-run:
+    - python3 -m pip install --no-cache-dir -r requirements.txt
+    - python3 -c "import uvicorn; print('Run OK uvicorn:', uvicorn.__version__)"
   command: python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8080
   network:
     port: 8080
