@@ -43,6 +43,14 @@ run:
       value: "1000000000"
     - name: S3_ALLOWED_CONTENT_TYPES
       value: '["image/png","image/jpeg","application/pdf","text/plain","application/octet-stream"]'
+    - name: DATABASE_URL
+      value-from: "logima-backend-app-proxy.proxy-cx2qwwsekqg2.us-east-2.rds.amazonaws.com"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "application_db"
+    - name: DB_USER
+      value: "app_user"
 
   # ---------- SECRETS (map each JSON key) ----------
   secrets:

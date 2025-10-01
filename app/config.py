@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     SESSION_SECRET: str
     SECRET_KEY: str
 
-    DATABASE_URL: str
+    DATABASE_URL: Optional[str] = None  # if not set, uses IAM auth
     SQLALCHEMY_ECHO: bool = False
     FRONTEND_ORIGIN: str = "http://localhost:5173"
     ENV: str = "dev"
@@ -71,5 +71,14 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=False,
     )
+
+    
+    DB_HOST: Optional[str] = None
+    DB_PORT: int = 5432
+    DB_NAME: Optional[str] = None
+    DB_USER: Optional[str] = None
+
+
+
 
 settings = Settings()
