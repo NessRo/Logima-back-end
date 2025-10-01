@@ -1,8 +1,9 @@
+import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from contextlib import asynccontextmanager
-from app.database import engine
+from contextlib import asynccontextmanager, suppress
+from app.database import get_engine, rotate_engine_every
 from app.routers import auth, projects, uploads
 from app.config import Settings
 
@@ -11,15 +12,24 @@ settings = Settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    yield
-    await engine.dispose()  # close pool on shutdown
+    # --- startup ---
+    await get_engine()  # warm the pool once so first request is fast
+    rotator = asyncio.create_task(rotate_engine_every(600))  # refresh IAM token/engine every 10m
+    try:
+        yield
+    finally:
+        # --- shutdown ---
+        rotator.cancel()
+        with suppress(asyncio.CancelledError):
+            await rotator
+        eng = await get_engine()
+        await eng.dispose()
 
 app = FastAPI(
     title="logima-backed API",
     version="0.1.0",
+    lifespan=lifespan,
 )
-
-
 
 # --- CORS so React can talk to it locally ---
 origins = [settings.FRONTEND_ORIGIN]
