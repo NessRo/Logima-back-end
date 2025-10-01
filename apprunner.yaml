@@ -1,5 +1,5 @@
 version: 1.0
-runtime: python3
+runtime: python311
 
 build:
   commands:
@@ -8,6 +8,7 @@ build:
       - python -m pip install -r requirements.txt
 
 run:
+  runtime-version: 3.11
   # lock if you want Python 3.11 specifically (optional)
   command: uvicorn app.main:app --host 0.0.0.0 --port 8080
   # network:                      # optional; default port is 8080
