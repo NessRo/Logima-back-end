@@ -56,7 +56,7 @@ run:
     - name: SECRET_KEY
       value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:SECRET_KEY::"
     - name: SESSION_SECRET
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb::SESSION_SECRET::"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:SESSION_SECRET::"
     - name: OPENAI_API_KEY
       value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:OPENAI_API_KEY::"
     - name: GOOGLE_CLIENT_ID
