@@ -9,7 +9,6 @@ build:
 
 run:
   # lock if you want Python 3.11 specifically (optional)
-  runtime-version: 3.11
   command: uvicorn app.main:app --host 0.0.0.0 --port 8080
   # network:                      # optional; default port is 8080
   #   port: 8080
