@@ -54,14 +54,14 @@ run:
   # ---------- SECRETS (from Secrets Manager) ----------
   secrets:
     - name: SECRET_KEY
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SECRET_KEY"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:AWSCURRENT:SECRET_KEY"
     - name: SESSION_SECRET
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SESSION_SECRET"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:AWSCURRENT:SESSION_SECRET"
     - name: OPENAI_API_KEY
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:OPENAI_API_KEY"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:AWSCURRENT:OPENAI_API_KEY"
     - name: GOOGLE_CLIENT_ID
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:GOOGLE_CLIENT_ID"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:AWSCURRENT:GOOGLE_CLIENT_ID"
     - name: GOOGLE_CLIENT_SECRET
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:GOOGLE_CLIENT_SECRET"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:AWSCURRENT:GOOGLE_CLIENT_SECRET"
     - name: SQS_UPLOADS_QUEUE_URL
-      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SQS_UPLOADS_QUEUE_URL"
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/logima/backend-NEe9lb:AWSCURRENT:SQS_UPLOADS_QUEUE_URL"
