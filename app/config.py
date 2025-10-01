@@ -4,11 +4,15 @@ from typing import List, Optional, Any
 from pydantic import Field, AliasChoices, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
-import json
+import os, json
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Load .env early so boto3 can see AWS_* env vars
-REPO_ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(REPO_ROOT / ".env")
+if os.getenv("ENV", "dev") != "prod":
+    dotenv_path = REPO_ROOT / ".env"
+    if dotenv_path.exists():
+        load_dotenv(dotenv_path, override=False)
 
 class Settings(BaseSettings):
     # --- App / OAuth ---
