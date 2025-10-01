@@ -20,3 +20,43 @@ run:
   command: python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8080
   network:
     port: 8080
+
+   # ---------- NON-SECRETS (plain env) ----------
+  env:
+    - name: ENV
+      value: "prod"
+    - name: SQLALCHEMY_ECHO
+      value: "false"
+    - name: AWS_REGION
+      value: "us-east-2"
+    - name: FRONTEND_ORIGIN
+      value: "https://app.yourdomain.com,http://localhost:5173"
+    - name: GOOGLE_REDIRECT_URL
+      value: "https://igtj3ec3u2.us-east-2.awsapprunner.com/auth/google/callback"
+    - name: S3_BUCKET
+      value: "logima"
+    - name: S3_KEY_PREFIX
+      value: "uploads"
+    - name: S3_PRESIGN_EXPIRES
+      value: "600"
+    - name: S3_MAX_BYTES
+      value: "1000000000"
+    - name: S3_ALLOWED_CONTENT_TYPES
+      value: '["image/png","image/jpeg","application/pdf","text/plain","application/octet-stream"]'
+
+  # ---------- SECRETS (map each JSON key) ----------
+  secrets:
+    - name: DATABASE_URL
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:DATABASE_URL"
+    - name: SECRET_KEY
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SECRET_KEY"
+    - name: SESSION_SECRET
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SESSION_SECRET"
+    - name: OPENAI_API_KEY
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:OPENAI_API_KEY"
+    - name: GOOGLE_CLIENT_ID
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:GOOGLE_CLIENT_ID"
+    - name: GOOGLE_CLIENT_SECRET
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:GOOGLE_CLIENT_SECRET"
+    - name: SQS_UPLOADS_QUEUE_URL
+      value-from: "arn:aws:secretsmanager:us-east-2:046481635852:secret:prod/app-runner/logima-backend:AWSCURRENT:SQS_UPLOADS_QUEUE_URL"
