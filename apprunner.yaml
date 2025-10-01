@@ -14,6 +14,6 @@ build:
 
 run:
   runtime-version: 3.11
-  command: uvicorn app.main:app --host 0.0.0.0 --port 8080
+  command: python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8080
   network:
     port: 8080
